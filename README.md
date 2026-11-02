@@ -53,6 +53,8 @@ Access the Brave search engine results directly through our efficient Piloterr s
 |---|---|---|---|
 | `query` | string | ✅ | The search query to execute on Brave Search. Supports all standard Brave search operators. |
 | `page` | number | — | Page number of results to retrieve. Used for pagination. |
+| `gl` | string | — | Country code, for example us, fr, gb, de. |
+| `hl` | string | — | Language code, for example en, fr, de. |
 
 ### Python example
 
@@ -65,7 +67,7 @@ response = requests.get(
     "https://api.piloterr.com/v2/brave/search",
     headers={"x-api-key": os.environ["PILOTERR_API_KEY"]},
     params={
-        "query": "best programming languages 2024",
+        "query": "anthropic",
     },
     timeout=60,
 )
@@ -86,17 +88,19 @@ type BraveSearch = {
     snippet?: string;
     position?: number;
     displayed_link?: string;
-    snippet_matched?: unknown[];
+    snippet_matched?: string[];
   }[];
   search_parameters?: {
     q?: string;
+    gl?: string;
+    hl?: string;
     page?: number;
     engine?: string;
   };
 };
 
 const params = new URLSearchParams({
-  "query": "best programming languages 2024",
+  "query": "anthropic",
 });
 
 const response = await fetch(`https://api.piloterr.com/v2/brave/search?${params}`, {
@@ -117,7 +121,7 @@ POST https://api.piloterr.com/v2/brave/search
 x-api-key: YOUR_API_KEY
 Content-Type: application/json
 
-{"query": "best programming languages 2024"}
+{"query": "anthropic"}
 ```
 </details>
 
@@ -129,27 +133,31 @@ Example response from the API reference, abridged — real values depend on the 
 {
   "organic_results": [
     {
-      "link": "https://survey.stackoverflow.co/2024/technology",
-      "title": "Technology | 2024 Stack Overflow Developer Survey",
-      "domain": "survey.stackoverflow.co",
-      "snippet": "JavaScript, Python and SQL are all highly-desired and admired programming languages, but Rust continues to be the most-admired programmin…",
+      "link": "https://www.anthropic.com/",
+      "title": "Anthropic",
+      "domain": "www.anthropic.com",
+      "snippet": "Anthropic is an AI safety company. Claude is its assistant.",
       "position": 1,
-      "displayed_link": "survey.stackoverflow.co › 2024  › technology",
-      "snippet_matched": []
+      "displayed_link": "anthropic.com",
+      "snippet_matched": [
+        "anthropic"
+      ]
     },
     {
-      "link": "https://www.tiobe.com/tiobe-index/",
-      "title": "TIOBE Index - TIOBE",
-      "domain": "www.tiobe.com",
-      "snippet": "1 day ago - The complete top 50 of programming languages is listed below.",
+      "link": "https://docs.anthropic.com/",
+      "title": "Anthropic documentation",
+      "domain": "docs.anthropic.com",
+      "snippet": "Documentation for the Claude API and the Anthropic platform.",
       "position": 2,
-      "displayed_link": "tiobe.com   › home  › tiobe index",
+      "displayed_link": "docs.anthropic.com",
       "snippet_matched": []
     }
   ],
   "search_parameters": {
-    "q": "best programming languages 2024",
-    "page": 0,
+    "q": "anthropic",
+    "gl": "us",
+    "hl": "en",
+    "page": 1,
     "engine": "brave"
   }
 }
@@ -166,9 +174,11 @@ Example response from the API reference, abridged — real values depend on the 
 | `organic_results[].snippet` | string |  |
 | `organic_results[].position` | integer |  |
 | `organic_results[].displayed_link` | string |  |
-| `organic_results[].snippet_matched` | any[] |  |
+| `organic_results[].snippet_matched` | string[] |  |
 | `search_parameters` | object |  |
 | `search_parameters.q` | string |  |
+| `search_parameters.gl` | string |  |
+| `search_parameters.hl` | string |  |
 | `search_parameters.page` | integer |  |
 | `search_parameters.engine` | string |  |
 
@@ -223,6 +233,10 @@ Each endpoint returns structured JSON: **Brave Search** — `organic_results[]`,
 ### How do I paginate Brave results?
 
 Use the `page` parameter and keep requesting while the response indicates more results.
+
+### Can I target a specific country or language?
+
+Yes, use `gl`, `hl` — see the parameter tables above for accepted values.
 
 ### Which languages are supported?
 

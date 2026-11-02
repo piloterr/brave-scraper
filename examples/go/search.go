@@ -15,7 +15,7 @@ import (
 
 func main() {
 	params := url.Values{}
-	params.Set("query", "best programming languages 2024")
+	params.Set("query", "anthropic")
 
 	req, _ := http.NewRequest("GET", "https://api.piloterr.com/v2/brave/search?"+params.Encode(), nil)
 	req.Header.Set("x-api-key", os.Getenv("PILOTERR_API_KEY"))

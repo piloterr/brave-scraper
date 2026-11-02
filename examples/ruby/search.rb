@@ -5,7 +5,7 @@ require "net/http"
 require "uri"
 
 uri = URI("https://api.piloterr.com/v2/brave/search")
-uri.query = URI.encode_www_form('query' => 'best programming languages 2024')
+uri.query = URI.encode_www_form('query' => 'anthropic')
 
 request = Net::HTTP::Get.new(uri)
 request["x-api-key"] = ENV.fetch("PILOTERR_API_KEY")
