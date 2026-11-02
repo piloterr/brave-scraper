@@ -69,7 +69,7 @@ response = requests.get(
     params={
         "query": "anthropic",
     },
-    timeout=60,
+    timeout=120,
 )
 response.raise_for_status()
 data = response.json()
